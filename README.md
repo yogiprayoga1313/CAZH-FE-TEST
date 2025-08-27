@@ -44,7 +44,8 @@ Mood Tracker adalah aplikasi web sederhana untuk mencatat suasana hati harian. A
    ```
 
 4. **Akses aplikasi**
-   Buka browser dan akses `http://localhost:3000`
+   Buka browser dan akses local `http://localhost:3000`
+   Deploy `https://mood-tracker-virid.vercel.app/`
 
 ---
 
