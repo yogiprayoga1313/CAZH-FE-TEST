@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import useMoodStore from "../store/MoodStore";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, TrashIcon, ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 
-export default function MoodItem({ mood }) {
+export default function MoodItem({ mood, className = "" }) {
     const deleteMood = useMoodStore((s) => s.deleteMood);
     const [showModal, setShowModal] = useState(false);
+    const [expanded, setExpanded] = useState(false);
 
     const moodEmojis = {
         1: "😢",
@@ -30,9 +31,11 @@ export default function MoodItem({ mood }) {
         setShowModal(false);
     };
 
+    const isLongNote = mood.note && mood.note.length > 120;
+
     return (
         <>
-            <div className="bg-gradient-to-r from-gray-50 to-white shadow-lg rounded-xl border border-gray-100 h-full flex flex-col justify-between hover:shadow-2xl transition">
+            <div className={`bg-gradient-to-r from-gray-50 to-white shadow-lg rounded-xl border border-gray-100 flex flex-col justify-between hover:shadow-2xl transition ${className}`}>
                 <div className="relative w-full h-30 flex justify-center items-center rounded-t-md overflow-hidden">
                     <div className="absolute inset-0 bg-yellow-200/30 backdrop-blur-md"></div>
                     <span className="absolute text-6xl text-yellow-300 blur-xl">
@@ -46,9 +49,31 @@ export default function MoodItem({ mood }) {
                 <div className="flex flex-col p-4 space-y-2">
                     <p className="text-gray-500 text-sm font-semibold">{formatDate(mood.date)}</p>
                     {mood.note && (
-                        <p className="text-gray-700 opacity-70">
-                            {mood.note}
-                        </p>
+                        <div>
+                            <p className={
+                                expanded
+                                    ? "text-gray-700 opacity-70"
+                                    : "text-gray-700 opacity-70 line-clamp-2"
+                            }>
+                                {mood.note}
+                            </p>
+                            {isLongNote && (
+                                <button
+                                    className="flex items-center text-blue-500 mt-1 hover:underline text-xs"
+                                    onClick={() => setExpanded((v) => !v)}
+                                >
+                                    {expanded ? (
+                                        <>
+                                            Show Less <ChevronUpIcon className="w-4 h-4 ml-1" />
+                                        </>
+                                    ) : (
+                                        <>
+                                            Learn More <ChevronDownIcon className="w-4 h-4 ml-1" />
+                                        </>
+                                    )}
+                                </button>
+                            )}
+                        </div>
                     )}
                 </div>
 
